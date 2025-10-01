@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      display:flex;align-items:center;justify-content:center;
+      height:100vh;
+      background:linear-gradient(135deg,#60a5fa,#6ee7b7);
+    }
+    .card{
+      background:#fff;
+      padding:30px;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.15);
+      width:100%;
+      max-width:350px;
+    }
+    h2{text-align:center;margin:0 0 20px;color:#333}
+    form{display:grid;gap:15px}
+    label{font-size:14px;color:#555}
+    input{
+      width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;font-size:14px;
+    }
+    input:focus{border-color:#60a5fa;outline:none;box-shadow:0 0 4px rgba(96,165,250,0.5)}
+    .btn{
+      background:#60a5fa;
+      color:#fff;
+      padding:10px;
+      border:none;
+      border-radius:8px;
+      font-size:16px;
+      cursor:pointer;
+    }
+    .btn:hover{background:#3b82f6}
+    .link{text-align:center;margin-top:10px;font-size:14px}
+    .link a{color:#3b82f6;text-decoration:none}
+    .link a:hover{text-decoration:underline}
+    .error{color:red;font-size:13px;text-align:center;margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required />
+      </div>
+      <button type="submit" class="btn">Login</button>
+    </form>
+    <div class="link">Don’t have an account? <a href="Register.html">Signup</a></div>
+    <div id="errorMsg" class="error"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        const res = await fetch("http://localhost:5500/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert("Login successful! Welcome " + data.user.name);
+          // Example: redirect to homepage
+          window.location.href = "page2.html"; //
+        }
+        else{
+          errorMsg.textContent = data.message || "Invalid credentials";
+        }
+        
+      } catch (err) {
+        errorMsg.textContent = "Server error. Try again.";
+      }
+    });
+  </script>
+</body>
+</html>
