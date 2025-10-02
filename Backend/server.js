@@ -56,7 +56,7 @@ app.post("/Register", async (req, res) => {
   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, result) => {
     if (err) return res.status(500).json({ message: "Database error" });
     if (result.length > 0) {
-      return res.status(400).json({ message: "Email already registered" });
+      return res.status(400).json({ message: "Email already registered" });m
     }
 
     db.query(
